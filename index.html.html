@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghar Se – Homemade Meals, Delivered Fresh</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --saffron:#E8630A; --saffron-light:#FFF4ED; --turmeric:#F5A623;
+  --green:#2D7A4F; --green-light:#E8F5EE;
+  --blue:#1A6FD4; --blue-light:#EBF3FF;
+  --cream:#FDF8F3; --dark:#1A120B; --muted:#6B5B4E;
+  --border:#EDE0D4; --white:#FFFFFF; --whatsapp:#25D366;
+  --radius:16px; --shadow:0 4px 24px rgba(26,18,11,0.10); --shadow-sm:0 2px 8px rgba(26,18,11,0.07);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;}
+nav{background:var(--white);border-bottom:1.5px solid var(--border);position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;box-shadow:var(--shadow-sm);}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.nav-logo-text{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--saffron);}
+.nav-links{display:flex;gap:4px;}
+.nav-links a{text-decoration:none;color:var(--muted);font-size:14px;font-weight:500;padding:6px 13px;border-radius:8px;transition:all 0.2s;cursor:pointer;}
+.nav-links a:hover,.nav-links a.active{background:var(--saffron-light);color:var(--saffron);}
+.nav-actions{display:flex;gap:10px;align-items:center;}
+.btn-outline{padding:8px 16px;border:1.5px solid var(--border);background:transparent;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;color:var(--dark);font-family:inherit;transition:all 0.2s;}
+.btn-outline:hover{border-color:var(--saffron);color:var(--saffron);}
+.btn-primary{padding:8px 16px;background:var(--saffron);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.btn-primary:hover{background:#c9530a;}
+.page{display:none;}.page.active{display:block;}
+.role-tabs{display:flex;background:var(--cream);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:28px;width:fit-content;}
+.role-tab{padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer;border:none;background:transparent;font-family:inherit;color:var(--muted);transition:all 0.2s;}
+.role-tab.active{background:var(--blue);color:#fff;}
+.hero{background:linear-gradient(135deg,#FFF4ED 0%,#FDF8F3 60%,#FFF0E0 100%);padding:64px 32px 48px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:320px;height:320px;background:radial-gradient(circle,#F5A62333 0%,transparent 70%);border-radius:50%;pointer-events:none;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,58px);font-weight:900;line-height:1.1;color:var(--dark);margin-bottom:14px;}
+.hero h1 span{color:var(--saffron);}
+.hero p{font-size:17px;color:var(--muted);max-width:520px;margin:0 auto 28px;}
+.search-bar{display:flex;max-width:540px;margin:0 auto 20px;background:#fff;border-radius:14px;box-shadow:var(--shadow);border:1.5px solid var(--border);overflow:hidden;}
+.search-bar input{flex:1;padding:13px 18px;border:none;outline:none;font-size:15px;font-family:inherit;background:transparent;}
+.search-bar button{background:var(--saffron);color:#fff;border:none;padding:13px 26px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;}
+.hero-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+.hero-tag{padding:5px 14px;background:#fff;border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.2s;}
+.hero-tag:hover{border-color:var(--saffron);color:var(--saffron);background:var(--saffron-light);}
+.section{padding:40px 32px;max-width:1200px;margin:0 auto;}
+.section-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px;}
+.section-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--dark);}
+.section-link{color:var(--saffron);font-size:14px;font-weight:600;cursor:pointer;}
+.food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:20px;}
+.food-card{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);border:1.5px solid var(--border);transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;}
+.food-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);}
+.food-card-img{width:100%;height:170px;display:flex;align-items:center;justify-content:center;font-size:64px;background:#f5e9df;}
+.food-card-body{padding:15px;}
+.food-card-name{font-weight:700;font-size:15px;margin-bottom:3px;}
+.food-card-chef{font-size:12px;color:var(--muted);margin-bottom:8px;}
+.food-card-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;}
+.tag{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+.tag-veg{background:#e8f5ee;color:var(--green);}
+.tag-nonveg{background:#ffeaea;color:#c0392b;}
+.tag-vegan{background:#e8f5ee;color:var(--green);}
+.tag-location{background:var(--saffron-light);color:var(--saffron);}
+.tag-delivery{background:var(--blue-light);color:var(--blue);}
+.food-card-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:11px;margin-top:4px;}
+.food-price{font-size:19px;font-weight:700;color:var(--saffron);}
+.food-price span{font-size:12px;font-weight:400;color:var(--muted);}
+.food-actions{display:flex;gap:6px;}
+.btn-wa{background:var(--whatsapp);color:#fff;border:none;border-radius:9px;padding:7px 13px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;transition:background 0.2s;}
+.btn-wa:hover{background:#1da851;}
+.btn-blue{background:var(--blue);color:#fff;border:none;border-radius:9px;padding:7px 13px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.2s;}
+.btn-blue:hover{background:#1258b0;}
+.btn-order{background:var(--saffron);color:#fff;border:none;border-radius:9px;padding:7px 13px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background 0.2s;}
+.btn-order:hover{background:#c9530a;}
+.delivery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+.delivery-card{background:var(--white);border-radius:var(--radius);padding:20px;border:1.5px solid var(--border);box-shadow:var(--shadow-sm);transition:transform 0.2s,box-shadow 0.2s;}
+.delivery-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+.delivery-card-top{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;}
+.delivery-avatar{width:54px;height:54px;border-radius:50%;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;border:2px solid var(--blue);}
+.delivery-name{font-weight:700;font-size:16px;}
+.delivery-meta{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.7;}
+.delivery-status{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;}
+.status-available{background:var(--green-light);color:var(--green);}
+.status-busy{background:#ffeaea;color:#c0392b;}
+.delivery-details{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.detail-box{background:var(--cream);border-radius:10px;padding:10px;}
+.detail-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px;}
+.detail-value{font-size:13px;font-weight:600;color:var(--dark);}
+.delivery-card-footer{border-top:1px solid var(--border);padding-top:12px;display:flex;gap:8px;}
+.delivery-card-footer .btn-wa,.delivery-card-footer .btn-blue{flex:1;justify-content:center;}
+.filters-bar{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px 22px;margin-bottom:24px;display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;}
+.filter-group{display:flex;flex-direction:column;gap:5px;min-width:150px;}
+.filter-group label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+.filter-group select,.filter-group input{padding:9px 11px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;font-family:inherit;color:var(--dark);background:var(--cream);outline:none;cursor:pointer;}
+.filter-group select:focus,.filter-group input:focus{border-color:var(--saffron);}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,18,11,0.45);z-index:200;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--white);border-radius:20px;padding:28px;max-width:520px;width:92%;box-shadow:0 20px 60px rgba(0,0,0,0.2);position:relative;max-height:90vh;overflow-y:auto;}
+.modal-close{position:absolute;top:14px;right:14px;background:var(--border);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.modal-close:hover{background:#ddd;}
+.modal h2{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:5px;}
+.modal-chef{font-size:13px;color:var(--muted);margin-bottom:14px;}
+.modal-img{width:100%;height:200px;border-radius:12px;background:#f5e9df;display:flex;align-items:center;justify-content:center;font-size:72px;margin-bottom:14px;}
+.modal-desc{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:14px;}
+.modal-info{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.modal-info-item{background:var(--cream);border-radius:10px;padding:11px;}
+.modal-info-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;}
+.modal-info-value{font-size:14px;font-weight:600;color:var(--dark);}
+.modal-price{font-size:30px;font-weight:700;color:var(--saffron);margin-bottom:16px;}
+.modal-actions{display:flex;gap:10px;}
+.modal-actions .btn-wa,.modal-actions .btn-blue{flex:1;justify-content:center;padding:12px;font-size:14px;border-radius:12px;}
+.form-card{background:var(--white);border-radius:var(--radius);padding:28px;border:1.5px solid var(--border);box-shadow:var(--shadow-sm);max-width:680px;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--dark);margin-bottom:5px;}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;color:var(--dark);background:var(--cream);outline:none;transition:border-color 0.2s;}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--saffron);background:#fff;}
+.form-group textarea{resize:vertical;min-height:72px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.hint{font-size:11px;color:var(--muted);margin-top:3px;}
+.submit-btn{width:100%;padding:13px;background:var(--saffron);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.2s;}
+.submit-btn:hover{background:#c9530a;}
+.submit-btn-blue{background:var(--blue);}
+.submit-btn-blue:hover{background:#1258b0;}
+.location-banner{background:linear-gradient(135deg,var(--green) 0%,#1a5c38 100%);border-radius:var(--radius);padding:22px 26px;color:#fff;display:flex;align-items:center;gap:18px;margin-bottom:28px;}
+.location-banner .icon{font-size:36px;}
+.location-banner h3{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:3px;}
+.location-banner p{font-size:13px;opacity:0.85;}
+.location-banner button{margin-left:auto;background:#fff;color:var(--green);border:none;padding:9px 18px;border-radius:10px;font-weight:700;cursor:pointer;font-family:inherit;font-size:13px;white-space:nowrap;}
+.about-card{background:var(--white);border-radius:var(--radius);padding:22px;border:1.5px solid var(--border);text-align:center;}
+.about-card .icon{font-size:34px;margin-bottom:10px;}
+.about-card h3{font-weight:700;font-size:15px;margin-bottom:7px;}
+.about-card p{font-size:13px;color:var(--muted);line-height:1.6;}
+.info-box{border-radius:var(--radius);padding:18px 20px;}
+.info-box-orange{background:var(--saffron-light);border:1.5px solid #f5c39a;}
+.info-box-green{background:var(--green-light);border:1.5px solid #a3d4b5;}
+.info-box-blue{background:var(--blue-light);border:1.5px solid #90bce8;}
+.empty-state{text-align:center;padding:52px 20px;color:var(--muted);}
+.empty-state .icon{font-size:52px;margin-bottom:14px;}
+.empty-state h3{font-size:18px;font-weight:700;color:var(--dark);margin-bottom:7px;}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:#fff;padding:12px 26px;border-radius:12px;font-size:14px;font-weight:500;z-index:999;transition:transform 0.3s;white-space:nowrap;box-shadow:var(--shadow);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+footer{background:var(--dark);color:#ccc;padding:36px 32px 20px;margin-top:48px;}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:28px;}
+.footer-brand .logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--saffron);margin-bottom:9px;}
+.footer-brand p{font-size:13px;line-height:1.6;color:#aaa;}
+.footer-col h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#fff;margin-bottom:12px;}
+.footer-col a{display:block;font-size:13px;color:#aaa;text-decoration:none;margin-bottom:7px;cursor:pointer;}
+.footer-col a:hover{color:var(--saffron);}
+.footer-bottom{border-top:1px solid #333;padding-top:18px;text-align:center;font-size:12px;color:#555;}
+@media(max-width:768px){
+  nav{padding:0 14px;}
+  .nav-links{display:none;}
+  .section{padding:28px 14px;}
+  .hero{padding:40px 14px 32px;}
+  .footer-inner{grid-template-columns:1fr;gap:20px;}
+  .form-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">
+    <span style="font-size:26px;">🏠</span>
+    <span class="nav-logo-text">Ghar Se</span>
+  </div>
+  <div class="nav-links">
+    <a id="nav-home" class="active" onclick="showPage('home')">Home</a>
+    <a id="nav-browse" onclick="showPage('browse')">Browse Food</a>
+    <a id="nav-sell" onclick="showPage('sell')">Sell Food</a>
+    <a id="nav-delivery" onclick="showPage('delivery')">🚴 Delivery</a>
+    <a id="nav-about" onclick="showPage('about')">About</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-outline" onclick="showPage('sell')">+ List Food</button>
+    <button class="btn-primary" onclick="showPage('browse')">Order Now</button>
+  </div>
+</nav>
+
+<!-- ===== HOME ===== -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <h1>Homemade Meals,<br><span>Delivered Fresh</span> 🍛</h1>
+    <p>Discover authentic home-cooked dishes from talented local chefs in your neighbourhood</p>
+    <div class="search-bar">
+      <input type="text" id="home-search" placeholder="Search dishes, chefs or area..." onkeydown="if(event.key==='Enter')doSearch();">
+      <button onclick="doSearch()">🔍 Search</button>
+    </div>
+    <div class="hero-tags">
+      <span class="hero-tag" onclick="filterTag('Biryani')">🍚 Biryani</span>
+      <span class="hero-tag" onclick="filterTag('Roti')">🫓 Roti &amp; Sabzi</span>
+      <span class="hero-tag" onclick="filterTag('Curry')">🍲 Curry</span>
+      <span class="hero-tag" onclick="filterTag('Snacks')">🥪 Snacks</span>
+      <span class="hero-tag" onclick="filterTag('Sweets')">🍮 Sweets</span>
+      <span class="hero-tag" onclick="filterTag('South Indian')">🥘 South Indian</span>
+    </div>
+  </div>
+
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px;">
+    <div class="location-banner" style="margin-top:28px;">
+      <span class="icon">📍</span>
+      <div>
+        <h3>Find Food Near You</h3>
+        <p id="location-text">Allow location access to discover home chefs cooking nearby</p>
+      </div>
+      <button onclick="getNearbyFood()">📡 Detect My Location</button>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div style="background:var(--white);border-top:1.5px solid var(--border);border-bottom:1.5px solid var(--border);padding:40px 32px;">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div class="section-title" style="text-align:center;margin-bottom:24px;">How Ghar Se Works</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+        <div class="about-card"><div class="icon">🔍</div><h3>Browse &amp; Discover</h3><p>Find home chefs nearby. Filter by cuisine, diet and price.</p></div>
+        <div class="about-card"><div class="icon">💬</div><h3>Order on WhatsApp</h3><p>Chat directly with the chef to confirm your order and timing.</p></div>
+        <div class="about-card"><div class="icon">🚴</div><h3>Delivery Guy Picks Up</h3><p>A local delivery partner collects from the chef and brings it to you.</p></div>
+        <div class="about-card"><div class="icon">🍽️</div><h3>Enjoy Fresh Food</h3><p>Hot, homemade and delivered with love right to your door!</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">🔥 Fresh Listings Today</div>
+      <a class="section-link" onclick="showPage('browse')">View All →</a>
+    </div>
+    <div class="food-grid" id="home-food-grid"></div>
+  </div>
+
+  <!-- DELIVERY CTA -->
+  <div style="max-width:1200px;margin:0 auto;padding:0 32px 40px;">
+    <div style="background:linear-gradient(135deg,var(--blue) 0%,#1258b0 100%);border-radius:var(--radius);padding:28px 32px;color:#fff;display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+      <span style="font-size:48px;">🚴</span>
+      <div style="flex:1;min-width:200px;">
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:6px;">Earn as a Delivery Partner</div>
+        <p style="font-size:14px;opacity:0.88;">Pick up food from home chefs and deliver to customers nearby. Flexible hours, instant earnings. Join the Ghar Se delivery network!</p>
+      </div>
+      <button onclick="showPage('delivery')" style="background:#fff;color:var(--blue);border:none;padding:12px 24px;border-radius:12px;font-weight:700;cursor:pointer;font-family:inherit;font-size:14px;">Join as Delivery Partner →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BROWSE FOOD ===== -->
+<div id="page-browse" class="page">
+  <div class="section">
+    <div class="section-title" style="margin-bottom:20px;">🍽️ Browse All Food</div>
+    <div class="filters-bar">
+      <div class="filter-group"><label>Diet</label>
+        <select id="f-diet" onchange="renderBrowse()">
+          <option value="">All</option><option>Veg</option><option>Non-Veg</option><option>Vegan</option>
+        </select>
+      </div>
+      <div class="filter-group"><label>Cuisine</label>
+        <select id="f-cuisine" onchange="renderBrowse()">
+          <option value="">All Cuisines</option><option>North Indian</option><option>South Indian</option>
+          <option>Bengali</option><option>Gujarati</option><option>Punjabi</option><option>Other</option>
+        </select>
+      </div>
+      <div class="filter-group"><label>Area</label>
+        <input type="text" id="f-area" placeholder="e.g. Andheri" oninput="renderBrowse()">
+      </div>
+      <div class="filter-group"><label>Max Price (₹)</label>
+        <input type="number" id="f-price" placeholder="e.g. 200" oninput="renderBrowse()">
+      </div>
+      <div class="filter-group"><label>Search</label>
+        <input type="text" id="f-search" placeholder="Dish name..." oninput="renderBrowse()">
+      </div>
+    </div>
+    <div class="food-grid" id="browse-food-grid"></div>
+  </div>
+</div>
+
+<!-- ===== SELL FOOD ===== -->
+<div id="page-sell" class="page">
+  <div class="section">
+    <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;">
+      <div style="flex:1;min-width:280px;">
+        <div class="section-title" style="margin-bottom:5px;">🍳 List Your Homemade Food</div>
+        <p style="color:var(--muted);margin-bottom:22px;font-size:14px;">Share your cooking and earn from your kitchen!</p>
+        <div class="form-card">
+          <div class="form-group"><label>Your Full Name *</label><input type="text" id="s-name" placeholder="e.g. Priya Sharma"></div>
+          <div class="form-row">
+            <div class="form-group"><label>WhatsApp Number *</label><input type="tel" id="s-wa" placeholder="+91 98765 43210"><div class="hint">Customers contact you here</div></div>
+            <div class="form-group"><label>Your Area / Location *</label><input type="text" id="s-area" placeholder="e.g. Banjara Hills, Hyderabad"></div>
+          </div>
+          <div class="form-group"><label>Dish Name *</label><input type="text" id="s-dish" placeholder="e.g. Maa ki Dal Tadka"></div>
+          <div class="form-group"><label>Description</label><textarea id="s-desc" placeholder="Describe your dish — ingredients, taste, story..."></textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label>Price (₹) *</label><input type="number" id="s-price" placeholder="150"></div>
+            <div class="form-group"><label>Serves (persons)</label><input type="number" id="s-serves" placeholder="2"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Cuisine *</label>
+              <select id="s-cuisine"><option>North Indian</option><option>South Indian</option><option>Bengali</option><option>Gujarati</option><option>Punjabi</option><option>Other</option></select>
+            </div>
+            <div class="form-group"><label>Diet Type *</label>
+              <select id="s-diet"><option value="Veg">🟢 Veg</option><option value="Non-Veg">🔴 Non-Veg</option><option value="Vegan">🌱 Vegan</option></select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Food Emoji</label><input type="text" id="s-emoji" placeholder="🍛" maxlength="4"><div class="hint">Visual icon for your listing</div></div>
+            <div class="form-group"><label>Available Days</label><input type="text" id="s-days" placeholder="e.g. Daily, Mon-Sat"></div>
+          </div>
+          <div class="form-group"><label>Delivery / Pickup?</label>
+            <select id="s-delivery"><option>Delivery Available</option><option>Pickup Only</option><option>Both</option></select>
+          </div>
+          <button class="submit-btn" onclick="submitListing()">🚀 Publish My Listing</button>
+        </div>
+      </div>
+      <div style="width:240px;flex-shrink:0;display:flex;flex-direction:column;gap:14px;">
+        <div class="info-box info-box-orange">
+          <div style="font-weight:700;font-size:14px;margin-bottom:9px;color:var(--saffron);">💡 Tips for Great Listings</div>
+          <ul style="font-size:13px;color:var(--muted);line-height:1.9;padding-left:14px;">
+            <li>Use a mouth-watering description</li>
+            <li>Set a fair, competitive price</li>
+            <li>Mention allergens clearly</li>
+            <li>Keep your WhatsApp active</li>
+            <li>Update availability daily</li>
+          </ul>
+        </div>
+        <div class="info-box info-box-green">
+          <div style="font-weight:700;font-size:14px;margin-bottom:7px;color:var(--green);">💰 How You Get Paid</div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.6;">Direct payment from customer — cash, UPI, GPay, PhonePe. You keep 100% of your earnings!</p>
+        </div>
+        <div class="info-box info-box-blue">
+          <div style="font-weight:700;font-size:14px;margin-bottom:7px;color:var(--blue);">🚴 Need Delivery Help?</div>
+          <p style="font-size:13px;color:var(--muted);line-height:1.6;">Our delivery partners are ready to pick up from your kitchen. <a onclick="showPage('delivery')" style="color:var(--blue);cursor:pointer;font-weight:600;">Browse delivery partners →</a></p>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:40px;">
+      <div class="section-title" style="margin-bottom:18px;">📋 Recent Listings</div>
+      <div class="food-grid" id="my-listings-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DELIVERY PAGE ===== -->
+<div id="page-delivery" class="page">
+  <div class="section">
+    <div class="role-tabs">
+      <button class="role-tab active" id="dtab-find" onclick="switchDeliveryTab('find')">🔍 Find a Delivery Partner</button>
+      <button class="role-tab" id="dtab-join" onclick="switchDeliveryTab('join')">🚴 Register as Delivery Partner</button>
+    </div>
+
+    <!-- FIND PANEL -->
+    <div id="delivery-find-panel">
+      <div style="margin-bottom:20px;">
+        <div class="section-title" style="margin-bottom:5px;">🚴 Available Delivery Partners</div>
+        <p style="color:var(--muted);font-size:14px;">Find a trusted delivery partner in your area. WhatsApp them directly to arrange pickup and delivery.</p>
+      </div>
+      <div class="filters-bar">
+        <div class="filter-group"><label>Area / Zone</label>
+          <input type="text" id="d-area" placeholder="e.g. Koramangala" oninput="renderDeliveryPartners()">
+        </div>
+        <div class="filter-group"><label>Vehicle Type</label>
+          <select id="d-vehicle" onchange="renderDeliveryPartners()">
+            <option value="">All Vehicles</option><option>Bicycle</option><option>Motorbike</option><option>Scooter</option><option>On Foot</option>
+          </select>
+        </div>
+        <div class="filter-group"><label>Availability</label>
+          <select id="d-status" onchange="renderDeliveryPartners()">
+            <option value="">All</option><option value="Available">Available Now</option><option value="Busy">Busy</option>
+          </select>
+        </div>
+      </div>
+      <div class="delivery-grid" id="delivery-partners-grid"></div>
+    </div>
+
+    <!-- JOIN PANEL -->
+    <div id="delivery-join-panel" style="display:none;">
+      <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;">
+        <div style="flex:1;min-width:280px;">
+          <div class="section-title" style="margin-bottom:5px;">🚴 Register as Delivery Partner</div>
+          <p style="color:var(--muted);margin-bottom:22px;font-size:14px;">List yourself and start earning by delivering homemade food in your area!</p>
+          <div class="form-card">
+            <div class="form-group"><label>Full Name *</label><input type="text" id="d-name" placeholder="e.g. Ravi Kumar"></div>
+            <div class="form-row">
+              <div class="form-group"><label>WhatsApp Number *</label><input type="tel" id="d-wa" placeholder="+91 98765 43210"><div class="hint">Chefs and customers will contact you here</div></div>
+              <div class="form-group"><label>Your Area / Zone *</label><input type="text" id="d-zone" placeholder="e.g. Indiranagar, Bengaluru"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Vehicle Type *</label>
+                <select id="d-vtype"><option>Motorbike</option><option>Scooter</option><option>Bicycle</option><option>On Foot</option></select>
+              </div>
+              <div class="form-group"><label>Delivery Radius</label>
+                <select id="d-radius"><option>1–3 km</option><option>3–5 km</option><option>5–10 km</option><option>10+ km</option></select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Charge per Delivery (₹) *</label><input type="number" id="d-charge" placeholder="e.g. 30"></div>
+              <div class="form-group"><label>Working Hours</label><input type="text" id="d-hours" placeholder="e.g. 8am–8pm"></div>
+            </div>
+            <div class="form-group"><label>About You (optional)</label><textarea id="d-about" placeholder="e.g. Experienced delivery rider, always on time, know the area well..."></textarea></div>
+            <div class="form-group"><label>Current Status</label>
+              <select id="d-avail"><option value="Available">✅ Available Now</option><option value="Busy">🔴 Busy</option></select>
+            </div>
+            <button class="submit-btn submit-btn-blue" onclick="submitDeliveryProfile()">🚀 Register as Delivery Partner</button>
+          </div>
+        </div>
+        <div style="width:240px;flex-shrink:0;display:flex;flex-direction:column;gap:14px;">
+          <div class="info-box info-box-blue">
+            <div style="font-weight:700;font-size:14px;margin-bottom:9px;color:var(--blue);">💸 How You Earn</div>
+            <ul style="font-size:13px;color:var(--muted);line-height:1.9;padding-left:14px;">
+              <li>Set your own delivery charge</li>
+              <li>Get paid per delivery</li>
+              <li>Cash or UPI — your choice</li>
+              <li>No monthly fees or commissions</li>
+            </ul>
+          </div>
+          <div class="info-box info-box-green">
+            <div style="font-weight:700;font-size:14px;margin-bottom:7px;color:var(--green);">✅ Requirements</div>
+            <ul style="font-size:13px;color:var(--muted);line-height:1.9;padding-left:14px;">
+              <li>Any vehicle or on foot</li>
+              <li>Active WhatsApp number</li>
+              <li>Honest and punctual</li>
+              <li>Know your local area well</li>
+            </ul>
+          </div>
+          <div class="info-box info-box-orange">
+            <div style="font-weight:700;font-size:14px;margin-bottom:7px;color:var(--saffron);">🤝 How it Works</div>
+            <p style="font-size:13px;color:var(--muted);line-height:1.6;">A chef or customer WhatsApps you to arrange a pickup. You collect the food, deliver it, and collect payment on the spot. Simple and flexible!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ABOUT ===== -->
+<div id="page-about" class="page">
+  <div class="section">
+    <div style="max-width:700px;">
+      <div class="section-title" style="margin-bottom:10px;">About Ghar Se 🏠</div>
+      <p style="font-size:15px;line-height:1.8;color:var(--muted);margin-bottom:20px;"><strong style="color:var(--dark);">Ghar Se</strong> (meaning "From Home") connects home cooks with food lovers, with local delivery partners bridging the gap. Everything via WhatsApp — no middlemen, no complicated apps, zero commission.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;">
+        <div class="about-card"><div class="icon">🤝</div><h3>Direct Connection</h3><p>Chef, delivery partner and customer communicate directly on WhatsApp.</p></div>
+        <div class="about-card"><div class="icon">💸</div><h3>Zero Commission</h3><p>We take nothing. 100% of earnings go to the chef and delivery partner.</p></div>
+        <div class="about-card"><div class="icon">🏘️</div><h3>Hyperlocal</h3><p>Support cooks and riders in your own neighbourhood. Community first.</p></div>
+        <div class="about-card"><div class="icon">🚴</div><h3>Local Delivery Network</h3><p>Independent delivery partners you can trust, just around the corner.</p></div>
+      </div>
+      <div class="info-box info-box-orange">
+        <div style="font-weight:700;font-size:15px;color:var(--saffron);margin-bottom:7px;">📞 Get in Touch</div>
+        <p style="font-size:14px;color:var(--muted);">Questions or feedback? WhatsApp us: <strong style="color:var(--dark);">+91 98765 00000</strong> or email <strong style="color:var(--dark);">hello@gharse.in</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOD MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal"><button class="modal-close" onclick="closeModal()">✕</button><div id="modal-body"></div></div>
+</div>
+
+<!-- DELIVERY MODAL -->
+<div class="modal-overlay" id="dmodal-overlay" onclick="closeDModalOutside(event)">
+  <div class="modal"><button class="modal-close" onclick="closeDModal()">✕</button><div id="dmodal-body"></div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">🏠 Ghar Se</div>
+      <p>Bringing the warmth of home-cooked food to your doorstep. Chefs, delivery partners and customers — all connected via WhatsApp.</p>
+    </div>
+    <div class="footer-col">
+      <h4>For Customers</h4>
+      <a onclick="showPage('browse')">Browse Food</a>
+      <a onclick="showPage('delivery')">Find Delivery Partner</a>
+      <a onclick="showPage('about')">How it Works</a>
+    </div>
+    <div class="footer-col">
+      <h4>For Chefs</h4>
+      <a onclick="showPage('sell')">List My Food</a>
+      <a onclick="showPage('delivery')">Find Delivery Help</a>
+    </div>
+    <div class="footer-col">
+      <h4>For Riders</h4>
+      <a onclick="switchDeliveryTab('join');showPage('delivery')">Register as Partner</a>
+      <a onclick="switchDeliveryTab('find');showPage('delivery')">Browse Deliveries</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 Ghar Se. Made with ❤️ for home chefs, hungry neighbours &amp; delivery heroes.</div>
+</footer>
+
+<script>
+// ============ DATA ============
+var listings = [
+  {id:1,name:"Maa ki Dal Tadka",chef:"Sunita Verma",area:"Koramangala, Bengaluru",price:120,serves:2,cuisine:"North Indian",diet:"Veg",desc:"Rich, slow-cooked yellow lentils tempered with ghee, cumin and red chillies. Just like home.",emoji:"🍲",wa:"+919876543210",days:"Daily",delivery:"Delivery Available",rating:4.8,reviews:23},
+  {id:2,name:"Hyderabadi Chicken Biryani",chef:"Fatima Siddiqui",area:"Banjara Hills, Hyderabad",price:280,serves:1,cuisine:"South Indian",diet:"Non-Veg",desc:"Authentic dum biryani with tender chicken, fragrant basmati rice and secret spice blend.",emoji:"🍗",wa:"+919988776655",days:"Fri-Sun",delivery:"Both",rating:4.9,reviews:41},
+  {id:3,name:"Gujarati Thali",chef:"Meena Patel",area:"Vastrapur, Ahmedabad",price:180,serves:1,cuisine:"Gujarati",diet:"Veg",desc:"Full thali with dal, sabzi, roti, rice, kadhi, pickle and papad. Pure comfort.",emoji:"🍱",wa:"+919123456780",days:"Mon-Sat",delivery:"Pickup Only",rating:4.7,reviews:18},
+  {id:4,name:"Bengali Fish Curry",chef:"Ruma Das",area:"Salt Lake, Kolkata",price:220,serves:2,cuisine:"Bengali",diet:"Non-Veg",desc:"Fresh rohu fish in a tangy mustard-turmeric gravy. A Bengal classic.",emoji:"🐟",wa:"+919000112233",days:"Daily",delivery:"Delivery Available",rating:4.6,reviews:12},
+  {id:5,name:"Punjabi Rajma Chawal",chef:"Harpreet Kaur",area:"Saket, Delhi",price:100,serves:1,cuisine:"Punjabi",diet:"Veg",desc:"Creamy kidney beans slow-cooked in tomato-onion gravy. Served with steamed basmati rice.",emoji:"🫘",wa:"+919871234560",days:"Daily",delivery:"Both",rating:4.5,reviews:9},
+  {id:6,name:"Kerala Prawn Curry",chef:"Deepa Nair",area:"Kakkanad, Kochi",price:260,serves:2,cuisine:"South Indian",diet:"Non-Veg",desc:"Juicy prawns cooked in coconut milk, curry leaves and raw mango. Served with appam.",emoji:"🦐",wa:"+919895001122",days:"Tue-Sun",delivery:"Delivery Available",rating:4.9,reviews:33},
+  {id:7,name:"Chocolate Gulab Jamun",chef:"Anjali Sharma",area:"Indiranagar, Bengaluru",price:80,serves:4,cuisine:"Other",diet:"Veg",desc:"Classic gulab jamun with a surprise molten chocolate centre. Made fresh every evening.",emoji:"🍮",wa:"+919980123450",days:"Daily",delivery:"Both",rating:4.7,reviews:27},
+  {id:8,name:"Masala Dosa with Sambar",chef:"Lakshmi Krishnan",area:"Anna Nagar, Chennai",price:90,serves:1,cuisine:"South Indian",diet:"Veg",desc:"Crispy golden dosa with spiced potato filling, coconut chutney and piping hot sambar.",emoji:"🥞",wa:"+919444556677",days:"Mon-Sat",delivery:"Pickup Only",rating:4.6,reviews:15}
+];
+var nextFoodId = 9;
+
+var deliveryPartners = [
+  {id:101,name:"Ravi Kumar",area:"Koramangala, Bengaluru",vehicle:"Motorbike",radius:"5–10 km",charge:30,hours:"8am–9pm",about:"Fast and reliable. 2 years experience delivering food in Bengaluru.",wa:"+919901234567",status:"Available",deliveries:148,rating:4.8},
+  {id:102,name:"Salman Sheikh",area:"Banjara Hills, Hyderabad",vehicle:"Scooter",radius:"3–5 km",charge:25,hours:"9am–8pm",about:"Always on time. Hot food delivered safely every time.",wa:"+919876001122",status:"Available",deliveries:92,rating:4.7},
+  {id:103,name:"Pradeep Nair",area:"Kakkanad, Kochi",vehicle:"Bicycle",radius:"1–3 km",charge:20,hours:"7am–7pm",about:"Eco-friendly delivery. Know every lane in Kakkanad.",wa:"+919895112233",status:"Busy",deliveries:61,rating:4.6},
+  {id:104,name:"Arjun Yadav",area:"Saket, Delhi",vehicle:"Motorbike",radius:"10+ km",charge:40,hours:"10am–10pm",about:"Wide area coverage across South Delhi. Punctual and careful.",wa:"+919810223344",status:"Available",deliveries:203,rating:4.9},
+  {id:105,name:"Kavitha R",area:"Anna Nagar, Chennai",vehicle:"Scooter",radius:"3–5 km",charge:25,hours:"8am–8pm",about:"Lady delivery partner. Food handled with extra care.",wa:"+919444667788",status:"Available",deliveries:55,rating:4.8},
+  {id:106,name:"Manish Pandey",area:"Salt Lake, Kolkata",vehicle:"Motorbike",radius:"5–10 km",charge:35,hours:"9am–9pm",about:"Fast delivery across Salt Lake and Bidhannagar area.",wa:"+919831445566",status:"Busy",deliveries:79,rating:4.5}
+];
+var nextDeliveryId = 107;
+
+// ============ NAVIGATION ============
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('page-'+p).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.remove('active');});
+  var nm={home:'nav-home',browse:'nav-browse',sell:'nav-sell',delivery:'nav-delivery',about:'nav-about'};
+  if(nm[p]) document.getElementById(nm[p]).classList.add('active');
+  window.scrollTo(0,0);
+  if(p==='browse') renderBrowse();
+  if(p==='sell') renderMyListings();
+  if(p==='home') renderHome();
+  if(p==='delivery') renderDeliveryPartners();
+}
+
+function switchDeliveryTab(tab) {
+  document.getElementById('delivery-find-panel').style.display = tab==='find' ? 'block' : 'none';
+  document.getElementById('delivery-join-panel').style.display = tab==='join' ? 'block' : 'none';
+  document.getElementById('dtab-find').classList.toggle('active', tab==='find');
+  document.getElementById('dtab-join').classList.toggle('active', tab==='join');
+  if(tab==='find') renderDeliveryPartners();
+}
+
+// ============ FOOD CARDS ============
+function foodCardHTML(item) {
+  var dc = item.diet==='Veg' ? 'tag-veg' : item.diet==='Vegan' ? 'tag-vegan' : 'tag-nonveg';
+  var di = item.diet==='Veg' ? '🟢' : item.diet==='Vegan' ? '🌱' : '🔴';
+  return '<div class="food-card" onclick="openModal('+item.id+')">'
+    +'<div class="food-card-img">'+(item.emoji||'🍽️')+'</div>'
+    +'<div class="food-card-body">'
+    +'<div class="food-card-name">'+item.name+'</div>'
+    +'<div class="food-card-chef">👨‍🍳 '+item.chef+' • 📍 '+item.area+'</div>'
+    +'<div class="food-card-tags">'
+    +'<span class="tag '+dc+'">'+di+' '+item.diet+'</span>'
+    +'<span class="tag tag-location">'+item.cuisine+'</span>'
+    +(item.delivery!=='Pickup Only' ? '<span class="tag tag-delivery">🚴 Delivery</span>' : '')
+    +'</div>'
+    +'<div style="font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5;">'+(item.desc.length>75?item.desc.slice(0,75)+'…':item.desc)+'</div>'
+    +'<div style="font-size:12px;color:var(--turmeric);margin-bottom:8px;">⭐ '+(item.rating||'New')+' ('+item.reviews+' reviews)</div>'
+    +'<div class="food-card-footer">'
+    +'<div class="food-price">₹'+item.price+' <span>/ serving</span></div>'
+    +'<div class="food-actions"><button class="btn-wa" onclick="event.stopPropagation();waOrder('+item.id+')">💬 Order</button></div>'
+    +'</div></div></div>';
+}
+
+function renderHome() {
+  document.getElementById('home-food-grid').innerHTML = listings.slice(0,6).map(foodCardHTML).join('');
+}
+
+function renderBrowse() {
+  var diet = document.getElementById('f-diet').value;
+  var cuisine = document.getElementById('f-cuisine').value;
+  var area = document.getElementById('f-area').value.toLowerCase();
+  var maxP = parseInt(document.getElementById('f-price').value)||99999;
+  var q = document.getElementById('f-search').value.toLowerCase();
+  var filtered = listings.filter(function(i){
+    return (!diet||i.diet===diet)&&(!cuisine||i.cuisine===cuisine)&&(!area||i.area.toLowerCase().includes(area))&&(i.price<=maxP)&&(!q||i.name.toLowerCase().includes(q)||i.chef.toLowerCase().includes(q));
+  });
+  var g = document.getElementById('browse-food-grid');
+  g.innerHTML = filtered.length ? filtered.map(foodCardHTML).join('') : '<div class="empty-state" style="grid-column:1/-1"><div class="icon">🔍</div><h3>No listings found</h3><p>Try different filters or <a onclick="showPage(\'sell\')" style="color:var(--saffron);cursor:pointer;">list your own food!</a></p></div>';
+}
+
+function renderMyListings() {
+  document.getElementById('my-listings-grid').innerHTML = listings.slice(-4).reverse().map(foodCardHTML).join('');
+}
+
+// ============ DELIVERY CARDS ============
+function deliveryCardHTML(p) {
+  var sc = p.status==='Available' ? 'status-available' : 'status-busy';
+  var si = p.status==='Available' ? '🟢' : '🔴';
+  return '<div class="delivery-card">'
+    +'<div class="delivery-card-top">'
+    +'<div class="delivery-avatar">🚴</div>'
+    +'<div style="flex:1;">'
+    +'<div class="delivery-name">'+p.name+'</div>'
+    +'<div class="delivery-meta">📍 '+p.area+'<br>'+p.vehicle+' • '+p.radius+'</div>'
+    +'<span class="delivery-status '+sc+'" style="margin-top:6px;display:inline-flex;">'+si+' '+p.status+'</span>'
+    +'</div></div>'
+    +'<div class="delivery-details">'
+    +'<div class="detail-box"><div class="detail-label">Charge</div><div class="detail-value">₹'+p.charge+'/order</div></div>'
+    +'<div class="detail-box"><div class="detail-label">Hours</div><div class="detail-value">'+p.hours+'</div></div>'
+    +'<div class="detail-box"><div class="detail-label">Deliveries Done</div><div class="detail-value">'+p.deliveries+'</div></div>'
+    +'<div class="detail-box"><div class="detail-label">Rating</div><div class="detail-value">⭐ '+p.rating+'</div></div>'
+    +'</div>'
+    +(p.about ? '<div style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.5;">"'+p.about+'"</div>' : '')
+    +'<div class="delivery-card-footer">'
+    +'<button class="btn-wa" onclick="waDelivery('+p.id+')">💬 WhatsApp</button>'
+    +'<button class="btn-blue" onclick="openDModal('+p.id+')">👁 View Details</button>'
+    +'</div></div>';
+}
+
+function renderDeliveryPartners() {
+  var g = document.getElementById('delivery-partners-grid');
+  if(!g) return;
+  var area = (document.getElementById('d-area')||{value:''}).value.toLowerCase();
+  var vehicle = (document.getElementById('d-vehicle')||{value:''}).value;
+  var status = (document.getElementById('d-status')||{value:''}).value;
+  var filtered = deliveryPartners.filter(function(p){
+    return (!area||p.area.toLowerCase().includes(area))&&(!vehicle||p.vehicle===vehicle)&&(!status||p.status===status);
+  });
+  g.innerHTML = filtered.length ? filtered.map(deliveryCardHTML).join('') : '<div class="empty-state" style="grid-column:1/-1"><div class="icon">🚴</div><h3>No delivery partners found</h3><p>Try a different area or <a onclick="switchDeliveryTab(\'join\')" style="color:var(--blue);cursor:pointer;">register as one!</a></p></div>';
+}
+
+// ============ FOOD MODAL ============
+function openModal(id) {
+  var item = listings.find(function(i){return i.id===id;});
+  if(!item) return;
+  var dc = item.diet==='Veg' ? 'tag-veg' : item.diet==='Vegan' ? 'tag-vegan' : 'tag-nonveg';
+  var di = item.diet==='Veg' ? '🟢' : item.diet==='Vegan' ? '🌱' : '🔴';
+  document.getElementById('modal-body').innerHTML =
+    '<div class="modal-img">'+(item.emoji||'🍽️')+'</div>'
+    +'<div style="display:flex;gap:7px;margin-bottom:9px;">'
+    +'<span class="tag '+dc+'">'+di+' '+item.diet+'</span>'
+    +'<span class="tag tag-location">'+item.cuisine+'</span>'
+    +(item.delivery!=='Pickup Only' ? '<span class="tag tag-delivery">🚴 Delivery</span>' : '')
+    +'</div>'
+    +'<h2>'+item.name+'</h2>'
+    +'<div class="modal-chef">👨‍🍳 '+item.chef+' • 📍 '+item.area+'</div>'
+    +'<p class="modal-desc">'+item.desc+'</p>'
+    +'<div class="modal-info">'
+    +'<div class="modal-info-item"><div class="modal-info-label">Serves</div><div class="modal-info-value">🍽️ '+item.serves+' person'+(item.serves>1?'s':'')+'</div></div>'
+    +'<div class="modal-info-item"><div class="modal-info-label">Available</div><div class="modal-info-value">📅 '+item.days+'</div></div>'
+    +'<div class="modal-info-item"><div class="modal-info-label">Delivery</div><div class="modal-info-value">'+(item.delivery==='Pickup Only'?'🚶':'🚴')+' '+item.delivery+'</div></div>'
+    +'<div class="modal-info-item"><div class="modal-info-label">Rating</div><div class="modal-info-value">⭐ '+(item.rating||'New')+' ('+item.reviews+')</div></div>'
+    +'</div>'
+    +'<div class="modal-price">₹'+item.price+' <span style="font-size:14px;color:var(--muted);font-weight:400;">per serving</span></div>'
+    +'<div style="background:var(--cream);border-radius:11px;padding:13px;margin-bottom:16px;font-size:13px;color:var(--muted);line-height:1.6;">'
+    +'💬 <strong style="color:var(--dark);">How to order:</strong> Tap WhatsApp below to chat with the chef. Confirm order, timing and payment (Cash/UPI/GPay). Need delivery? <a onclick="closeModal();showPage(\'delivery\')" style="color:var(--blue);cursor:pointer;font-weight:600;">Find a delivery partner →</a>'
+    +'</div>'
+    +'<div class="modal-actions">'
+    +'<button class="btn-wa" onclick="waOrder('+item.id+')">💬 Order on WhatsApp</button>'
+    +'<button class="btn-blue" onclick="closeModal();showPage(\'delivery\')">🚴 Find Delivery</button>'
+    +'</div>';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
+function closeModalOutside(e){if(e.target.id==='modal-overlay')closeModal();}
+
+// ============ DELIVERY MODAL ============
+function openDModal(id) {
+  var p = deliveryPartners.find(function(d){return d.id===id;});
+  if(!p) return;
+  var sc = p.status==='Available' ? 'status-available' : 'status-busy';
+  document.getElementById('dmodal-body').innerHTML =
+    '<div style="text-align:center;margin-bottom:18px;">'
+    +'<div style="width:80px;height:80px;border-radius:50%;background:var(--blue-light);border:3px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 12px;">🚴</div>'
+    +'<h2>'+p.name+'</h2>'
+    +'<div style="font-size:14px;color:var(--muted);margin-top:4px;">📍 '+p.area+' • '+p.vehicle+'</div>'
+    +'<span class="delivery-status '+sc+'" style="margin-top:8px;display:inline-flex;">'+(p.status==='Available'?'🟢':'🔴')+' '+p.status+'</span>'
+    +'</div>'
+    +'<div class="modal-info">'
+    +'<div class="modal-info-item"><div class="modal-info-label">Delivery Charge</div><div class="modal-info-value">₹'+p.charge+' per order</div></div>'
+    +'<div class="modal-info-item"><div class="modal-info-label">Working Hours</div><div class="modal-info-value">'+p.hours+'</div></div>'
+    +'<div class="modal-info-item"><div class="modal-info-label">Delivery Radius</div><div class="modal-info-value">'+p.radius+'</div></div>'
+    +'<div class="modal-info-item"><div class="modal-info-label">Total Deliveries</div><div class="modal-info-value">'+p.deliveries+' done</div></div>'
+    +'</div>'
+    +(p.about ? '<div style="background:var(--blue-light);border-radius:10px;padding:13px;font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6;border:1px solid #90bce8;">"'+p.about+'"</div>' : '')
+    +'<div style="background:var(--cream);border-radius:10px;padding:13px;margin-bottom:16px;font-size:13px;color:var(--muted);line-height:1.6;">'
+    +'💬 <strong style="color:var(--dark);">How to hire:</strong> WhatsApp '+p.name.split(' ')[0]+' with the chef\'s address (pickup), your address (drop-off) and order details. Agree on timing and pay ₹'+p.charge+' on delivery.'
+    +'</div>'
+    +'<div class="modal-actions">'
+    +'<button class="btn-wa" onclick="waDelivery('+p.id+')">💬 WhatsApp '+p.name.split(' ')[0]+'</button>'
+    +'</div>';
+  document.getElementById('dmodal-overlay').classList.add('open');
+}
+function closeDModal(){document.getElementById('dmodal-overlay').classList.remove('open');}
+function closeDModalOutside(e){if(e.target.id==='dmodal-overlay')closeDModal();}
+
+// ============ WHATSAPP ============
+function waOrder(id) {
+  var item = listings.find(function(i){return i.id===id;});
+  if(!item) return;
+  var num = item.wa.replace(/\D/g,'');
+  var msg = encodeURIComponent('Hi '+item.chef+'! I saw your listing for *'+item.name+'* (₹'+item.price+') on *Ghar Se*. I would like to place an order. Could you please confirm availability, delivery details and payment method? 🙏');
+  window.open('https://wa.me/'+num+'?text='+msg,'_blank');
+}
+function waDelivery(id) {
+  var p = deliveryPartners.find(function(d){return d.id===id;});
+  if(!p) return;
+  var num = p.wa.replace(/\D/g,'');
+  var msg = encodeURIComponent('Hi '+p.name+'! I found you on *Ghar Se* as a delivery partner in '+p.area+'. I need a food pickup and delivery. Are you available? Your charge is ₹'+p.charge+' per order. Please confirm! 🙏');
+  window.open('https://wa.me/'+num+'?text='+msg,'_blank');
+}
+
+// ============ SUBMIT FOOD ============
+function submitListing() {
+  var name = document.getElementById('s-name').value.trim();
+  var wa = document.getElementById('s-wa').value.trim();
+  var area = document.getElementById('s-area').value.trim();
+  var dish = document.getElementById('s-dish').value.trim();
+  var price = parseInt(document.getElementById('s-price').value);
+  if(!name||!wa||!area||!dish||!price){showToast('⚠️ Please fill in all required fields!');return;}
+  if(!wa.match(/^\+?[0-9\s\-]{8,15}$/)){showToast('⚠️ Please enter a valid WhatsApp number');return;}
+  listings.unshift({
+    id:nextFoodId++,name:dish,chef:name,area:area,price:price,
+    serves:parseInt(document.getElementById('s-serves').value)||1,
+    cuisine:document.getElementById('s-cuisine').value,
+    diet:document.getElementById('s-diet').value,
+    desc:document.getElementById('s-desc').value||'Delicious homemade food made with love.',
+    emoji:document.getElementById('s-emoji').value||'🍽️',
+    wa:wa,days:document.getElementById('s-days').value||'Daily',
+    delivery:document.getElementById('s-delivery').value,
+    rating:null,reviews:0
+  });
+  ['s-name','s-wa','s-area','s-dish','s-price','s-serves','s-desc','s-emoji','s-days'].forEach(function(id){document.getElementById(id).value='';});
+  showToast('🎉 Your food listing is now live on Ghar Se!');
+  renderMyListings(); renderHome();
+}
+
+// ============ SUBMIT DELIVERY PROFILE ============
+function submitDeliveryProfile() {
+  var name = document.getElementById('d-name').value.trim();
+  var wa = document.getElementById('d-wa').value.trim();
+  var zone = document.getElementById('d-zone').value.trim();
+  var charge = parseInt(document.getElementById('d-charge').value);
+  if(!name||!wa||!zone||!charge){showToast('⚠️ Please fill in all required fields!');return;}
+  if(!wa.match(/^\+?[0-9\s\-]{8,15}$/)){showToast('⚠️ Please enter a valid WhatsApp number');return;}
+  deliveryPartners.unshift({
+    id:nextDeliveryId++,name:name,area:zone,
+    vehicle:document.getElementById('d-vtype').value,
+    radius:document.getElementById('d-radius').value,
+    charge:charge,hours:document.getElementById('d-hours').value||'Flexible',
+    about:document.getElementById('d-about').value,
+    wa:wa,status:document.getElementById('d-avail').value,
+    deliveries:0,rating:5.0
+  });
+  ['d-name','d-wa','d-zone','d-charge','d-hours','d-about'].forEach(function(id){document.getElementById(id).value='';});
+  showToast('🚴 You are now registered as a delivery partner on Ghar Se!');
+  switchDeliveryTab('find');
+  renderDeliveryPartners();
+}
+
+// ============ MISC ============
+function doSearch(){var q=document.getElementById('home-search').value;showPage('browse');document.getElementById('f-search').value=q;renderBrowse();}
+function filterTag(tag){showPage('browse');document.getElementById('f-search').value=tag;renderBrowse();}
+function getNearbyFood(){
+  if(!navigator.geolocation){showToast('Geolocation not supported');return;}
+  navigator.geolocation.getCurrentPosition(
+    function(pos){
+      var lat=pos.coords.latitude.toFixed(4),lng=pos.coords.longitude.toFixed(4);
+      document.getElementById('location-text').textContent='📍 Location detected ('+lat+', '+lng+') — Showing nearby listings!';
+      showToast('📍 Location detected! Showing food near you.');
+      showPage('browse');
+    },
+    function(){showToast('Location access denied. Please enter your area manually.');}
+  );
+}
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},3200);}
+
+// INIT
+renderHome();
+</script>
+</body>
+</html>
